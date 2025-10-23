@@ -5,7 +5,8 @@ A modern, minimalist weather app to search a city and view current conditions. B
 ## Features
 
 - Centered search bar with smooth interactions
-- Current weather via OpenWeatherMap: city, country, temperature, feels like, condition, humidity, wind, and icon
+- Current weather via OpenWeatherMap: city, country, temperature, feels like, condition, and icon
+- Detailed metrics: humidity (%), wind speed with unit (m/s for metric, mph for imperial) and compass direction, sunrise/sunset in the searched city's local time
 - 5-day forecast with daily min/max and representative condition/icon
 - Unit toggle (°C/°F) with session persistence
 - Loading and friendly error states
