@@ -4,7 +4,8 @@ import './App.css';
 import { theme } from './theme';
 import SearchBar from './components/SearchBar';
 import WeatherCard from './components/WeatherCard';
-import { fetchCurrentWeather, getWeatherApiKey } from './api/weather';
+import ForecastCard from './components/ForecastCard';
+import { fetchCurrentWeather, fetchFiveDayForecast, getWeatherApiKey } from './api/weather';
 
 // PUBLIC_INTERFACE
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
   });
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
+  const [forecast, setForecast] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [showKeyBanner, setShowKeyBanner] = useState(() => !getWeatherApiKey());
@@ -40,13 +42,29 @@ export default function App() {
     setLoading(true);
     setErrorMsg('');
     setResult(null);
-    const res = await fetchCurrentWeather(city, units);
+    setForecast(null);
+
+    // Fetch current and forecast in parallel
+    const [currentRes, forecastRes] = await Promise.all([
+      fetchCurrentWeather(city, units),
+      fetchFiveDayForecast(city, units),
+    ]);
+
     setLoading(false);
-    if (!res.ok) {
-      setErrorMsg(res.error || 'Something went wrong.');
+
+    if (!currentRes.ok) {
+      setErrorMsg(currentRes.error || 'Something went wrong.');
       return;
     }
-    setResult(res.data);
+    setResult(currentRes.data);
+
+    if (forecastRes.ok) {
+      setForecast(forecastRes.data);
+    } else {
+      // Do not block; attach a soft message if useful
+      // Optionally, we could show a compact warning in UI; for now, keep silent and log
+      // console.warn('Forecast unavailable:', forecastRes.error);
+    }
   };
 
   const toggleUnits = () => {
@@ -116,7 +134,14 @@ export default function App() {
             )}
 
             {!loading && !errorMsg && result && (
-              <WeatherCard data={result} units={units} />
+              <>
+                <WeatherCard data={result} units={units} />
+                {forecast?.days?.length ? (
+                  <div style={{ marginTop: 16 }}>
+                    <ForecastCard days={forecast.days} units={units} />
+                  </div>
+                ) : null}
+              </>
             )}
           </section>
         </main>

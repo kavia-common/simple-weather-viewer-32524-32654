@@ -6,6 +6,7 @@ A modern, minimalist weather app to search a city and view current conditions. B
 
 - Centered search bar with smooth interactions
 - Current weather via OpenWeatherMap: city, country, temperature, feels like, condition, humidity, wind, and icon
+- 5-day forecast with daily min/max and representative condition/icon
 - Unit toggle (°C/°F) with session persistence
 - Loading and friendly error states
 - Ocean Professional theme with subtle gradient background, rounded corners, and shadows
@@ -51,6 +52,7 @@ If the API key is missing, the UI will still render and show a setup banner. Sea
 
 ## Notes
 
-- API: https://api.openweathermap.org/data/2.5/weather
+- API (current): https://api.openweathermap.org/data/2.5/weather
+- API (5-day forecast): https://api.openweathermap.org/data/2.5/forecast
 - Units: metric (°C, m/s) or imperial (°F, mph)
 - This app does not use accounts or save locations.
