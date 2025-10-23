@@ -11,7 +11,7 @@ import { fetchCurrentWeather, fetchFiveDayForecast, getWeatherApiKey } from './a
 export default function App() {
   /**
    * Main app entrypoint. Renders a centered search bar and weather result card.
-   * Handles loading, error, and missing API key states. Supports unit toggle °C/°F.
+   * Handles loading, error, and missing API key states. Supports unit toggle °C/°F and theme toggle light/dark.
    */
   const [units, setUnits] = useState(() => {
     // Initialize from localStorage to persist across reloads; default to 'metric'
@@ -19,10 +19,20 @@ export default function App() {
       const saved = window.localStorage.getItem('units');
       return saved === 'imperial' ? 'imperial' : 'metric';
     } catch {
-      // Fallback if storage not accessible
       return 'metric';
     }
   });
+
+  const [themeMode, setThemeMode] = useState(() => {
+    // Initialize theme from localStorage, default to 'light'
+    try {
+      const saved = window.localStorage.getItem('themeMode');
+      return saved === 'dark' ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
   const [forecast, setForecast] = useState(null);
@@ -39,14 +49,30 @@ export default function App() {
     }
   }, [units]);
 
-  const gradientStyle = useMemo(
-    () => ({
-      background:
-        'linear-gradient(180deg, rgba(59,130,246,0.10) 0%, rgba(249,250,251,1) 100%)',
+  useEffect(() => {
+    // Persist theme choice and reflect it on the root element for CSS variables
+    try {
+      window.localStorage.setItem('themeMode', themeMode);
+    } catch {
+      // ignore storage errors
+    }
+    // Apply to documentElement so all CSS can target [data-theme="dark"]
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', themeMode);
+    }
+  }, [themeMode]);
+
+  const gradientStyle = useMemo(() => {
+    // Use subtle gradients per theme
+    const isDark = themeMode === 'dark';
+    const bg = isDark
+      ? 'linear-gradient(180deg, rgba(59,130,246,0.10) 0%, rgba(2,6,23,1) 100%)'
+      : 'linear-gradient(180deg, rgba(59,130,246,0.10) 0%, rgba(249,250,251,1) 100%)';
+    return {
+      background: bg,
       minHeight: '100vh',
-    }),
-    []
-  );
+    };
+  }, [themeMode]);
 
   const handleSearch = async (city) => {
     setQuery(city);
@@ -72,20 +98,24 @@ export default function App() {
     if (forecastRes.ok) {
       setForecast(forecastRes.data);
     } else {
-      // Do not block; attach a soft message if useful
-      // Optionally, we could show a compact warning in UI; for now, keep silent and log
-      // console.warn('Forecast unavailable:', forecastRes.error);
+      // optional soft log
     }
   };
 
   const toggleUnits = () => {
     setUnits((u) => (u === 'metric' ? 'imperial' : 'metric'));
-    // if there is a current query, refetch
     if (query) {
-      // fire and forget (not awaiting to keep UI snappy)
+      // refetch for current query
       handleSearch(query);
     }
   };
+
+  const toggleTheme = () => {
+    setThemeMode((m) => (m === 'light' ? 'dark' : 'light'));
+  };
+
+  const themeIcon = themeMode === 'dark' ? '☾' : '☀';
+  const themeLabel = themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
 
   return (
     <div className="app-root" style={gradientStyle}>
@@ -95,7 +125,15 @@ export default function App() {
             <span className="brand-dot" />
             Ocean Weather
           </h1>
-          <div className="actions">
+          <div className="actions" style={{ display: 'flex', gap: 8 }}>
+            <button
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label={themeLabel}
+              title={themeLabel}
+            >
+              {themeIcon}
+            </button>
             <button
               className="unit-toggle"
               onClick={toggleUnits}

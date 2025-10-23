@@ -9,6 +9,7 @@ A modern, minimalist weather app to search a city and view current conditions. B
 - Detailed metrics: humidity (%), wind speed with unit (m/s for metric, mph for imperial) and compass direction, sunrise/sunset in the searched city's local time
 - 5-day forecast with daily min/max and representative condition/icon
 - Unit toggle (°C/°F) with session persistence
+- Dark Mode toggle (Light/Dark) with persistence
 - Loading and friendly error states
 - Ocean Professional theme with subtle gradient background, rounded corners, and shadows
 - Graceful handling of missing API key with a dismissible banner
@@ -60,4 +61,10 @@ If the API key is missing, the UI will still render and show a setup banner. Sea
 
 ### Preferences
 - The selected temperature unit (°C/°F) is persisted across reloads using localStorage.
-- On first load (or if nothing is saved), the app defaults to metric (°C).
+- The selected theme mode (light/dark) is persisted across reloads using localStorage.
+- On first load (or if nothing is saved), the app defaults to metric (°C) and light mode.
+
+### Dark Mode
+- Toggle the sun/moon icon in the top-right to switch between themes.
+- The theme system uses CSS variables on the root with `[data-theme="dark"]` and smooth transitions.
+- Dark variants are applied for background, surface, text, muted text, card borders, and gradients to maintain accessible contrast.
