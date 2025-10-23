@@ -56,3 +56,7 @@ If the API key is missing, the UI will still render and show a setup banner. Sea
 - API (5-day forecast): https://api.openweathermap.org/data/2.5/forecast
 - Units: metric (°C, m/s) or imperial (°F, mph)
 - This app does not use accounts or save locations.
+
+### Preferences
+- The selected temperature unit (°C/°F) is persisted across reloads using localStorage.
+- On first load (or if nothing is saved), the app defaults to metric (°C).

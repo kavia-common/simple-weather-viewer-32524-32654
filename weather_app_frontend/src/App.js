@@ -14,8 +14,14 @@ export default function App() {
    * Handles loading, error, and missing API key states. Supports unit toggle °C/°F.
    */
   const [units, setUnits] = useState(() => {
-    // Persist during session only
-    return sessionStorage.getItem('units') || 'metric';
+    // Initialize from localStorage to persist across reloads; default to 'metric'
+    try {
+      const saved = window.localStorage.getItem('units');
+      return saved === 'imperial' ? 'imperial' : 'metric';
+    } catch {
+      // Fallback if storage not accessible
+      return 'metric';
+    }
   });
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
@@ -25,7 +31,12 @@ export default function App() {
   const [showKeyBanner, setShowKeyBanner] = useState(() => !getWeatherApiKey());
 
   useEffect(() => {
-    sessionStorage.setItem('units', units);
+    // Persist unit changes across sessions
+    try {
+      window.localStorage.setItem('units', units);
+    } catch {
+      // ignore storage errors (e.g., privacy mode)
+    }
   }, [units]);
 
   const gradientStyle = useMemo(
