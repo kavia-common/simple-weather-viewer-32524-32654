@@ -1,82 +1,56 @@
-# Lightweight React Template for KAVIA
+# Simple Weather Viewer (Ocean Professional)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A modern, minimalist weather app to search a city and view current conditions. Built with React (CRA) and a custom Ocean Professional theme.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Centered search bar with smooth interactions
+- Current weather via OpenWeatherMap: city, country, temperature, feels like, condition, humidity, wind, and icon
+- Unit toggle (°C/°F) with session persistence
+- Loading and friendly error states
+- Ocean Professional theme with subtle gradient background, rounded corners, and shadows
+- Graceful handling of missing API key with a dismissible banner
 
 ## Getting Started
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+1) Install dependencies:
+```bash
+npm install
 ```
 
-### Components
+2) Set your OpenWeatherMap API key:
+- Copy `.env.example` to `.env` and set the value:
+```bash
+cp .env.example .env
+# edit .env and set REACT_APP_WEATHER_API_KEY
+```
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+This CRA project reads `REACT_APP_WEATHER_API_KEY`. The code also supports Vite (`VITE_WEATHER_API_KEY`) if you migrate in the future.
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+3) Run the app:
+```bash
+npm start
+```
+Open http://localhost:3000 in your browser.
 
-## Learn More
+## Environment Variables
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- REACT_APP_WEATHER_API_KEY: Your OpenWeatherMap API key (required for real data)
+- (Optional) VITE_WEATHER_API_KEY: Supported by the API client if using Vite
 
-### Code Splitting
+If the API key is missing, the UI will still render and show a setup banner. Searches will return a friendly error.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Project Structure
 
-### Analyzing the Bundle Size
+- `src/api/weather.js` — API client and env key detection
+- `src/components/SearchBar.jsx` — Search input and submit
+- `src/components/WeatherCard.jsx` — Results card UI
+- `src/theme.js` — Theme tokens
+- `src/App.js` — Main app wiring
+- `src/index.css` — Global and component styles
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Notes
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- API: https://api.openweathermap.org/data/2.5/weather
+- Units: metric (°C, m/s) or imperial (°F, mph)
+- This app does not use accounts or save locations.

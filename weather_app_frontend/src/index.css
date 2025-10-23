@@ -1,13 +1,283 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --primary: #3b82f6;
+  --secondary: #64748b;
+  --success: #06b6d4;
+  --error: #EF4444;
+  --background: #f9fafb;
+  --surface: #ffffff;
+  --text: #111827;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+  --transition: all 200ms ease;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
 }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(59,130,246,0.10) 0%, rgba(249,250,251,1) 100%);
+}
+
+/* Layout */
+.app-root .container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  margin: 0;
+}
+
+.brand-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--success));
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.unit-toggle {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,0.05);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.unit-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Banner */
+.banner {
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid #fb923c;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.banner--warn { }
+.banner__dismiss {
+  background: transparent;
+  border: none;
+  color: #9a3412;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* SearchBar */
+.searchbar {
+  display: block;
+  width: 100%;
+}
+.searchbar__inner {
+  display: flex;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 10px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: var(--transition);
+}
+.searchbar__inner:focus-within {
+  box-shadow: 0 8px 24px rgba(59,130,246,0.15);
+  border-color: rgba(59,130,246,0.35);
+}
+.searchbar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 12px 14px;
+  background: transparent;
+  color: var(--text);
+}
+.searchbar button {
+  background: linear-gradient(135deg, var(--primary), #60a5fa);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.searchbar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.searchbar button:hover:enabled {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Results */
+.main { margin-top: 20px; }
+.results {
+  margin-top: 16px;
+}
+
+.loading, .error {
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  color: var(--secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error {
+  border-left: 4px solid var(--error);
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(59,130,246,0.25);
+  border-top-color: var(--primary);
+  border-radius: 999px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Weather Card */
+.weather-card {
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 18px;
+  transition: var(--transition);
+}
+.weather-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+}
+
+.weather-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-card__title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.weather-card__title h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--text);
+}
+.weather-card__country {
+  color: var(--secondary);
+  font-weight: 500;
+  font-size: 14px;
+  background: rgba(100,116,139,0.08);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.weather-card__icon {
+  width: 72px;
+  height: 72px;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.weather-card__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+.weather-card__temp {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.weather-card__temp .value {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+}
+.weather-card__temp .unit {
+  font-size: 18px;
+  color: var(--secondary);
+}
+
+.weather-card__meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+.meta-item {
+  background: rgba(59,130,246,0.06);
+  border: 1px solid rgba(59,130,246,0.15);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+}
+.meta-item .label {
+  display: block;
+  font-size: 12px;
+  color: var(--secondary);
+}
+.meta-item .value {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Footer */
+.footer {
+  margin-top: 32px;
+  text-align: center;
+  color: var(--secondary);
+}
+.footer a { color: var(--primary); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.hint { font-size: 12px; }
